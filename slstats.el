@@ -24,6 +24,9 @@
 (defconst slstats-lab-url "http://secondlife.com/httprequest/homepage.php"
   "The URL that contains the SL statistics.")
 
+(defconst slstats-grid-size-url "http://api.gridsurvey.com/metricquery.php?metric=grid_size"
+  "The URL that contains grid size data.")
+
 (defun slstats-to-alist (stats)
   "Turn raw STATS list into an alist."
   (when stats
@@ -31,9 +34,9 @@
      (cons (intern (concat ":" (car stats))) (cadr stats))
      (slstats-to-alist (cddr stats)))))
 
-(defun slstats-load-lab-data ()
-  "Load the raw statistics about Second Life from Linden Lab."
-  (with-current-buffer (url-retrieve-synchronously slstats-lab-url t)
+(defun slstats-load-data (url &optional sep)
+  "Load data about SL from URL."
+  (with-current-buffer (url-retrieve-synchronously url t)
     (setf (point) (point-min))
     (when (search-forward-regexp "^$" nil t)
       (slstats-to-alist
@@ -42,7 +45,15 @@
           (zerop (length s)))
         (split-string
          (buffer-substring-no-properties (point) (point-max))
-         "\n"))))))
+         sep))))))
+
+(defun slstats-load-lab-data ()
+  "Load the raw statistics about Second Life from Linden Lab."
+  (slstats-load-data slstats-lab-url "\n"))
+
+(defun slstats-load-grid-size-data ()
+  "Load the grid size data."
+  (slstats-load-data slstats-grid-size-url))
 
 (defun slstats-format-time (time stats)
   "Format TIME from STATS as a string."
