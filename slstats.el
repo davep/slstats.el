@@ -4,7 +4,7 @@
 ;; Author: Dave Pearson <davep@davep.org>
 ;; Version: 1.0
 ;; Keywords: games
-;; URL: https://github.com/davep/macinfo.el
+;; URL: https://github.com/davep/slstats.el
 ;; Package-Requires: ((cl-lib "0.5"))
 
 ;; slstats.el is free software distributed under the terms of the GNU
