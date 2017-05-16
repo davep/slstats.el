@@ -90,31 +90,57 @@ last-update time for the statistic."
   (slstats-message "Avatars in-world" :inworld :inworld_updated_unix))
 
 ;;;###autoload
+(defun slstats-grid-size ()
+  "Display the grid size data for Second Life."
+  (interactive)
+  (let ((stats (slstats-load-grid-size-data)))
+    (message "Regions: Total: %s, Private: %s, Linden: %s, Adult: %s, Mature: %s, PG: %s, Linden Homes: %s"
+             (cdr (assoc :total stats))
+             (cdr (assoc :private stats))
+             (cdr (assoc :linden stats))
+             (cdr (assoc :adult stats))
+             (cdr (assoc :mature stats))
+             (cdr (assoc :pg stats))
+             (cdr (assoc :linden_homes stats)))))
+
+(defun slstats-format-grid-size-total (title size stats)
+  (format "%s: %s\n" title (cdr (assoc size stats))))
+
+;;;###autoload
 (defun slstats ()
   "Display available statistics about Second Life.
 
 This includes information available about the state of the grid and the SL economy."
   (interactive)
-  (let ((stats (slstats-load-lab-data)))
+  (let ((lab-stats (slstats-load-lab-data))
+        (grid-size (slstats-load-grid-size-data)))
     (with-help-window "*Second Life Stats*"
       (princ "Total sign-ups..: ")
-      (princ (cdr (assoc :signups stats)))
+      (princ (cdr (assoc :signups lab-stats)))
       (princ "\n")
       (princ "Last updated....: ")
-      (princ (slstats-format-time :signups_updated_unix stats))
+      (princ (slstats-format-time :signups_updated_unix lab-stats))
       (princ "\n\n")
       (princ "Exchange rate...: ")
-      (princ (cdr (assoc :exchange_rate stats)))
+      (princ (cdr (assoc :exchange_rate lab-stats)))
       (princ "\n")
       (princ "Last updated....: ")
-      (princ (slstats-format-time :exchange_rate_updated_unix stats))
+      (princ (slstats-format-time :exchange_rate_updated_unix lab-stats))
       (princ "\n\n")
       (princ "Avatars in-world: ")
-      (princ (cdr (assoc :inworld stats)))
+      (princ (cdr (assoc :inworld lab-stats)))
       (princ "\n")
       (princ "Last updated....: ")
-      (princ (slstats-format-time :inworld_updated_unix stats))
-      (princ "\n\n"))))
+      (princ (slstats-format-time :inworld_updated_unix lab-stats))
+      (princ "\n\n")
+      (princ "Grid size:\n")
+      (princ (slstats-format-grid-size-total "Total......." :total grid-size))
+      (princ (slstats-format-grid-size-total "Private....." :private grid-size))
+      (princ (slstats-format-grid-size-total "Linden......" :linden grid-size))
+      (princ (slstats-format-grid-size-total "Adult......." :adult grid-size))
+      (princ (slstats-format-grid-size-total "Mature......" :mature grid-size))
+      (princ (slstats-format-grid-size-total "PG.........." :pg grid-size))
+      (princ (slstats-format-grid-size-total "Linden Homes" :linden_homes grid-size)))))
 
 (provide 'slstats)
 
