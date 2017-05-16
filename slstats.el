@@ -30,6 +30,9 @@
 (defconst slstats-region-info-url "http://api.gridsurvey.com/simquery.php?region=%s"
   "The URL that gets data about a region.")
 
+(defconst slstats-texture-url "http://secondlife.com/app/image/%s/2"
+  "URL for viewing a Second Life texture.")
+
 (defun slstats-get (key stats)
   "Get a value associated with KEY from STATS."
   (cdr (assoc key stats)))
@@ -71,6 +74,10 @@ SEP is an optional separator that is passed to `split-string'."
 (defun slstats-format-time (time stats)
   "Format TIME from STATS as a string."
   (format-time-string "%F %T%z" (string-to-number (slstats-get time stats))))
+
+(defun slstats-texture-url (uuid)
+  "Return a Second Life texture URL for UUID."
+  (format slstats-texture-url uuid))
 
 (defun slstats-message (name data time)
   "Show a Second Life statistic as a message.
@@ -174,8 +181,8 @@ This includes information available about the state of the grid and the SL econo
         (princ (format "Estate type: %s\n" (slstats-get :estate region-info)))
         (princ (format "First seen on grid: %s\n" (slstats-get :firstseen region-info)))
         (princ (format "Last seen on grid: %s\n" (slstats-get :lastseen region-info)))
-        (princ (format "Object map: %s\n" (slstats-get :objects_uuid region-info)))
-        (princ (format "Terrain map: %s\n" (slstats-get :terrain_uuid region-info)))
+        (princ (format "Object map: %s\n" (slstats-texture-url (slstats-get :objects_uuid region-info))))
+        (princ (format "Terrain map: %s\n" (slstats-texture-url (slstats-get :terrain_uuid region-info))))
         (princ (format "Region UUID: %s\n" (slstats-get :region_uuid region-info)))))))
 
 (provide 'slstats)
