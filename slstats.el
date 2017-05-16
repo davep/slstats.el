@@ -21,7 +21,7 @@
 (require 'url)
 (require 'cl-lib)
 
-(defconst slstats-url "http://secondlife.com/httprequest/homepage.php"
+(defconst slstats-lab-url "http://secondlife.com/httprequest/homepage.php"
   "The URL that contains the SL statistics.")
 
 (defun slstats-to-alist (stats)
@@ -31,9 +31,9 @@
      (cons (intern (concat ":" (car stats))) (cadr stats))
      (slstats-to-alist (cddr stats)))))
 
-(defun slstats-load ()
-  "Load the raw statistics from Second Life."
-  (with-current-buffer (url-retrieve-synchronously slstats-url t)
+(defun slstats-load-lab-data ()
+  "Load the raw statistics about Second Life from Linden Lab."
+  (with-current-buffer (url-retrieve-synchronously slstats-lab-url t)
     (setf (point) (point-min))
     (when (search-forward-regexp "^$" nil t)
       (slstats-to-alist
@@ -54,7 +54,7 @@
 NAME is the title to give the statistic. DATA is the keyword for
 finding the statistic. TIME is the keyword for finding the
 last-update time for the statistic."
-  (let ((stats (slstats-load)))
+  (let ((stats (slstats-load-lab-data)))
     (message "%s: %s (as of %s)"
              name
              (cdr (assoc data stats))
@@ -84,7 +84,7 @@ last-update time for the statistic."
 
 This includes information available about the state of the grid and the SL economy."
   (interactive)
-  (let ((stats (slstats-load)))
+  (let ((stats (slstats-load-lab-data)))
     (with-help-window "*Second Life Stats*"
       (princ "Total sign-ups..: ")
       (princ (cdr (assoc :signups stats)))
