@@ -27,6 +27,9 @@
 (defconst slstats-grid-size-url "http://api.gridsurvey.com/metricquery.php?metric=grid_size"
   "The URL that contains grid size data.")
 
+(defconst slstats-region-info-url "http://api.gridsurvey.com/simquery.php?region=%s"
+  "The URL that gets data about a region.")
+
 (defun slstats-get (key stats)
   "Get a value associated with KEY from STATS."
   (cdr (assoc key stats)))
@@ -60,6 +63,10 @@ SEP is an optional separator that is passed to `split-string'."
 (defun slstats-load-grid-size-data ()
   "Load the grid size data."
   (slstats-load-data slstats-grid-size-url))
+
+(defun slstats-load-region-data (region)
+  "Load data about REGION."
+  (slstats-load-data (format slstats-region-info-url (url-encode-url region))))
 
 (defun slstats-format-time (time stats)
   "Format TIME from STATS as a string."
