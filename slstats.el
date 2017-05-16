@@ -27,6 +27,10 @@
 (defconst slstats-grid-size-url "http://api.gridsurvey.com/metricquery.php?metric=grid_size"
   "The URL that contains grid size data.")
 
+(defun slstats-get (key stats)
+  "Get a value associated with KEY from STATS."
+  (cdr (assoc key stats)))
+
 (defun slstats-to-alist (stats)
   "Turn raw STATS list into an alist."
   (when stats
@@ -57,7 +61,7 @@
 
 (defun slstats-format-time (time stats)
   "Format TIME from STATS as a string."
-  (format-time-string "%F %T%z" (string-to-number (cdr (assoc time stats)))))
+  (format-time-string "%F %T%z" (string-to-number (slstats-get time stats))))
 
 (defun slstats-message (name data time)
   "Show a Second Life statistic as a message.
@@ -68,7 +72,7 @@ last-update time for the statistic."
   (let ((stats (slstats-load-lab-data)))
     (message "%s: %s (as of %s)"
              name
-             (cdr (assoc data stats))
+             (slstats-get data stats)
              (slstats-format-time time stats))))
 
 ;;;###autoload
@@ -95,16 +99,16 @@ last-update time for the statistic."
   (interactive)
   (let ((stats (slstats-load-grid-size-data)))
     (message "Regions: Total: %s, Private: %s, Linden: %s, Adult: %s, Mature: %s, PG: %s, Linden Homes: %s"
-             (cdr (assoc :total stats))
-             (cdr (assoc :private stats))
-             (cdr (assoc :linden stats))
-             (cdr (assoc :adult stats))
-             (cdr (assoc :mature stats))
-             (cdr (assoc :pg stats))
-             (cdr (assoc :linden_homes stats)))))
+             (slstats-get :total stats)
+             (slstats-get :private stats)
+             (slstats-get :linden stats)
+             (slstats-get :adult stats)
+             (slstats-get :mature stats)
+             (slstats-get :pg stats)
+             (slstats-get :linden_homes stats))))
 
 (defun slstats-format-grid-size-total (title size stats)
-  (format "%s: %s\n" title (cdr (assoc size stats))))
+  (format "%s: %s\n" title (slstats-get size stats)))
 
 ;;;###autoload
 (defun slstats ()
@@ -116,19 +120,19 @@ This includes information available about the state of the grid and the SL econo
         (grid-size (slstats-load-grid-size-data)))
     (with-help-window "*Second Life Stats*"
       (princ "Total sign-ups..: ")
-      (princ (cdr (assoc :signups lab-stats)))
+      (princ (slstats-get :signups lab-stats))
       (princ "\n")
       (princ "Last updated....: ")
       (princ (slstats-format-time :signups_updated_unix lab-stats))
       (princ "\n\n")
       (princ "Exchange rate...: ")
-      (princ (cdr (assoc :exchange_rate lab-stats)))
+      (princ (slstats-get :exchange_rate lab-stats))
       (princ "\n")
       (princ "Last updated....: ")
       (princ (slstats-format-time :exchange_rate_updated_unix lab-stats))
       (princ "\n\n")
       (princ "Avatars in-world: ")
-      (princ (cdr (assoc :inworld lab-stats)))
+      (princ (slstats-get :inworld lab-stats))
       (princ "\n")
       (princ "Last updated....: ")
       (princ (slstats-format-time :inworld_updated_unix lab-stats))
