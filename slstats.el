@@ -74,7 +74,7 @@ last-update time for the statistic."
 
 ;;;###autoload
 (defun slstats-inworld ()
-  "Display how many avatars are inworld in Second Life."
+  "Display how many avatars are in-world in Second Life."
   (interactive)
   (slstats-message "Avatars in-world" :inworld :inworld_updated_unix))
 
