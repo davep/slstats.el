@@ -66,6 +66,7 @@
              (cdr (assoc :exchange_rate stats))
              (slstats-format-time :exchange_rate_updated_unix stats))))
 
+;;;###autoload
 (defun slstats-inworld ()
   "Display how many avatars are inworld in Second Life."
   (interactive)
