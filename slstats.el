@@ -39,7 +39,9 @@
      (slstats-to-alist (cddr stats)))))
 
 (defun slstats-load-data (url &optional sep)
-  "Load data about SL from URL."
+  "Load data about SL from URL.
+
+SEP is an optional separator that is passed to `split-string'."
   (with-current-buffer (url-retrieve-synchronously url t)
     (setf (point) (point-min))
     (when (search-forward-regexp "^$" nil t)
@@ -108,6 +110,11 @@ last-update time for the statistic."
              (slstats-get :linden_homes stats))))
 
 (defun slstats-format-grid-size-total (title size stats)
+  "Format a grid size total.
+
+TITLE is the title to give the size. SIZE is the keyword of the
+size we're going to format, and STATS is the stats list we'll
+pull it from."
   (format "%s: %s\n" title (slstats-get size stats)))
 
 ;;;###autoload
