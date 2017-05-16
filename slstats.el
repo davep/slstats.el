@@ -48,32 +48,35 @@
   "Format TIME from STATS as a string."
   (format-time-string "%F %T%z" (string-to-number (cdr (assoc time stats)))))
 
+(defun slstats-message (name data time)
+  "Show a Second Life statistic as a message.
+
+NAME is the title to give the statistic. DATA is the keyword for
+finding the statistic. TIME is the keyword for finding the
+last-update time for the statistic."
+  (let ((stats (slstats-load)))
+    (message "%s: %s (as of %s)"
+             name
+             (cdr (assoc data stats))
+             (slstats-format-time time stats))))
+
 ;;;###autoload
 (defun slstats-signups ()
   "Display the Second Life sign-up count."
   (interactive)
-  (let ((stats (slstats-load)))
-    (message "Sign-ups: %s (as of %s)"
-             (cdr (assoc :signups stats))
-             (slstats-format-time :signups_updated_unix stats))))
+  (slstats-message "Sign-ups" :signups :signups_updated_unix))
 
 ;;;###autoload
 (defun slstats-exchange-rate ()
   "Display the L$ -> $ exchange rate."
   (interactive)
-  (let ((stats (slstats-load)))
-    (message "L$/$: %s (as of %s)"
-             (cdr (assoc :exchange_rate stats))
-             (slstats-format-time :exchange_rate_updated_unix stats))))
+  (slstats-message "L$/$" :exchange_rate :exchange_rate_updated_unix))
 
 ;;;###autoload
 (defun slstats-inworld ()
   "Display how many avatars are inworld in Second Life."
   (interactive)
-  (let ((stats (slstats-load)))
-    (message "Avatars in-world: %s (as of %s)"
-             (cdr (assoc :inworld stats))
-             (slstats-format-time :inworld_updated_unix stats))))
+  (slstats-message "Avatars in-world" :inworld :inworld_updated_unix))
 
 ;;;###autoload
 (defun slstats ()
