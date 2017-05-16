@@ -66,7 +66,7 @@ SEP is an optional separator that is passed to `split-string'."
 
 (defun slstats-load-region-data (region)
   "Load data about REGION."
-  (slstats-load-data (format slstats-region-info-url (url-encode-url region))))
+  (slstats-load-data (format slstats-region-info-url (url-hexify-string region))))
 
 (defun slstats-format-time (time stats)
   "Format TIME from STATS as a string."
