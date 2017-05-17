@@ -46,6 +46,9 @@
 (defconst slstats-lab-url "http://secondlife.com/httprequest/homepage.php"
   "The URL that contains the SL statistics.")
 
+(defconst slstats-concurrency-url "http://api.gridsurvey.com/metricquery.php?metric=concurrency"
+  "The URL that contains the grid's concurrency data.")
+
 (defconst slstats-grid-size-url "http://api.gridsurvey.com/metricquery.php?metric=grid_size"
   "The URL that contains grid size data.")
 
@@ -84,6 +87,10 @@ SEP is an optional separator that is passed to `split-string'."
 (defun slstats-load-lab-data ()
   "Load the raw statistics about Second Life from Linden Lab."
   (slstats-load-data slstats-lab-url "\n"))
+
+(defun slstats-load-concurrency-data ()
+  "Load the concurrency data."
+  (slstats-load-data slstats-concurrency-url))
 
 (defun slstats-load-grid-size-data ()
   "Load the grid size data."
@@ -134,6 +141,18 @@ last-update time for the statistic."
   (slstats-message "Avatars in-world" :inworld :inworld_updated_unix))
 
 ;;;###autoload
+(defun slstats-concurrency ()
+  "Display the latest-known concurrency stats for Second Life."
+  (interactive)
+  (let ((stats (slstats-load-concurrency-data)))
+    (message "As of %s: Max: %s, Min: %s, Mean: %s, Median: %s"
+             (slstats-get :date stats)
+             (slstats-get :max_online stats)
+             (slstats-get :min_online stats)
+             (slstats-get :mean_online stats)
+             (slstats-get :median_online stats))))
+
+;;;###autoload
 (defun slstats-grid-size ()
   "Display the grid size data for Second Life."
   (interactive)
@@ -166,7 +185,8 @@ pull it from."
 This includes information available about the state of the grid and the SL economy."
   (interactive)
   (let ((lab-stats (slstats-load-lab-data))
-        (grid-size (slstats-load-grid-size-data)))
+        (grid-size (slstats-load-grid-size-data))
+        (grid-conc (slstats-load-concurrency-data)))
     (with-help-window "*Second Life Stats*"
       (with-current-buffer standard-output
         (insert
@@ -196,7 +216,19 @@ This includes information available about the state of the grid and the SL econo
          (slstats-format-grid-size-total "Adult......." :adult grid-size)
          (slstats-format-grid-size-total "Mature......" :mature grid-size)
          (slstats-format-grid-size-total "PG.........." :pg grid-size)
-         (slstats-format-grid-size-total "Linden Homes" :linden_homes grid-size))))))
+         (slstats-format-grid-size-total "Linden Homes" :linden_homes grid-size)
+         "\n"
+         (slstats-caption "Grid concurrency")
+         "\n"
+         (slstats-caption "As of..") (slstats-get :date grid-conc)
+         "\n"
+         (slstats-caption "Minimum") (slstats-get :min_online grid-conc)
+         "\n"
+         (slstats-caption "Maximum") (slstats-get :max_online grid-conc)
+         "\n"
+         (slstats-caption "Median.") (slstats-get :median_online grid-conc)
+         "\n"
+         (slstats-caption "Mean...") (slstats-get :mean_online grid-conc))))))
 
 (defun slstats-insert-map (uuid)
   "Given a UUID, insert a map texture into the current buffer."
