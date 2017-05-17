@@ -184,7 +184,7 @@ This includes information available about the state of the grid and the SL econo
            (format "Maturity level: %s\n" (slstats-get :access region-info))
            (format "Estate type: %s\n" (slstats-get :estate region-info))
            (format "First seen on grid: %s\n" (slstats-get :firstseen region-info))
-           (format "Last seen on grid: %s\n" (slstats-get :lastseen region-info)))
+           (format "Last seen on grid: %s (as seen by GridSurvey.com)\n" (slstats-get :lastseen region-info)))
           (insert "Object map: ")
           (help-insert-xref-button
            (slstats-texture-url (slstats-get :objects_uuid region-info))
