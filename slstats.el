@@ -253,7 +253,7 @@ This includes information available about the state of the grid and the SL econo
                "\n"
                (slstats-caption "Region UUID.......")
                (slstats-get :region_uuid region-info))
-              (when window-system
+              (when (display-images-p)
                 (insert
                  "\n\n"
                  (slstats-caption "Object map")
