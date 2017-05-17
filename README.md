@@ -26,4 +26,4 @@ something like this:
 `slstats-region-info` - Prompts for a Second Life region name and displays
 information about it in a window.
 
-![M-x slstats-region-info Clementina RET](slstats-region-info.png)
+![M-x slstats-region-info RET Clementina RET](slstats-region-info.png)
