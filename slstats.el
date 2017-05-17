@@ -21,6 +21,15 @@
 (require 'url)
 (require 'cl-lib)
 
+(defgroup slstats nil
+  "Show stats and information about Second Life."
+  :group 'games)
+
+(defface slstats-caption
+  '((t :inherit (bold font-lock-function-name-face)))
+  "Face used on captions in the slstats output windows."
+  :group 'games)
+
 (defconst slstats-lab-url "http://secondlife.com/httprequest/homepage.php"
   "The URL that contains the SL statistics.")
 
@@ -123,13 +132,17 @@ last-update time for the statistic."
              (slstats-get :pg stats)
              (slstats-get :linden_homes stats))))
 
+(defun slstats-caption (s)
+  "Add properties to S to make it a caption for the slstats outout."
+  (propertize (concat s ": ") 'font-lock-face 'package-help-section-name))
+
 (defun slstats-format-grid-size-total (title size stats)
   "Format a grid size total.
 
 TITLE is the title to give the size. SIZE is the keyword of the
 size we're going to format, and STATS is the stats list we'll
 pull it from."
-  (format "%s: %s\n" title (slstats-get size stats)))
+  (format "%s%s\n" (slstats-caption title) (slstats-get size stats)))
 
 ;;;###autoload
 (defun slstats ()
@@ -142,25 +155,26 @@ This includes information available about the state of the grid and the SL econo
     (with-help-window "*Second Life Stats*"
       (with-current-buffer standard-output
         (insert
-         "Total sign-ups..: "
+         (slstats-caption "Total sign-ups..")
          (slstats-get :signups lab-stats)
          "\n"
-         "Last updated....: "
+         (slstats-caption "Last updated....")
          (slstats-format-time :signups_updated_unix lab-stats)
          "\n\n"
-         "Exchange rate...: "
+         (slstats-caption "Exchange rate...")
          (slstats-get :exchange_rate lab-stats)
          "\n"
-         "Last updated....: "
+         (slstats-caption "Last updated....")
          (slstats-format-time :exchange_rate_updated_unix lab-stats)
          "\n\n"
-         "Avatars in-world: "
+         (slstats-caption "Avatars in-world")
          (slstats-get :inworld lab-stats)
          "\n"
-         "Last updated....: "
+         (slstats-caption "Last updated....")
          (slstats-format-time :inworld_updated_unix lab-stats)
          "\n\n"
-         "Grid size:\n"
+         (slstats-caption "Grid size")
+         "\n"
          (slstats-format-grid-size-total "Total......." :total grid-size)
          (slstats-format-grid-size-total "Private....." :private grid-size)
          (slstats-format-grid-size-total "Linden......" :linden grid-size)
