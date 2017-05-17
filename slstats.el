@@ -174,16 +174,18 @@ This includes information available about the state of the grid and the SL econo
       (message "Please provide a region name")
     (let ((region-info (slstats-load-region-data region)))
       (with-help-window "*Second Life Region Information*"
-        (princ (format "Information for %s\n\n" region))
-        (princ (format "Grid position: %s, %s\n" (slstats-get :x region-info) (slstats-get :y region-info)))
-        (princ (format "Status: %s\n" (slstats-get :status region-info)))
-        (princ (format "Maturity level: %s\n" (slstats-get :access region-info)))
-        (princ (format "Estate type: %s\n" (slstats-get :estate region-info)))
-        (princ (format "First seen on grid: %s\n" (slstats-get :firstseen region-info)))
-        (princ (format "Last seen on grid: %s\n" (slstats-get :lastseen region-info)))
-        (princ (format "Object map: %s\n" (slstats-texture-url (slstats-get :objects_uuid region-info))))
-        (princ (format "Terrain map: %s\n" (slstats-texture-url (slstats-get :terrain_uuid region-info))))
-        (princ (format "Region UUID: %s\n" (slstats-get :region_uuid region-info)))))))
+        (with-current-buffer standard-output
+          (insert
+           (format "Information for %s\n\n" region)
+           (format "Grid position: %s, %s\n" (slstats-get :x region-info) (slstats-get :y region-info))
+           (format "Status: %s\n" (slstats-get :status region-info))
+           (format "Maturity level: %s\n" (slstats-get :access region-info))
+           (format "Estate type: %s\n" (slstats-get :estate region-info))
+           (format "First seen on grid: %s\n" (slstats-get :firstseen region-info))
+           (format "Last seen on grid: %s\n" (slstats-get :lastseen region-info))
+           (format "Object map: %s\n" (slstats-texture-url (slstats-get :objects_uuid region-info)))
+           (format "Terrain map: %s\n" (slstats-texture-url (slstats-get :terrain_uuid region-info)))
+           (format "Region UUID: %s\n" (slstats-get :region_uuid region-info))))))))
 
 (provide 'slstats)
 
