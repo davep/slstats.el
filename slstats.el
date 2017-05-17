@@ -183,6 +183,14 @@ This includes information available about the state of the grid and the SL econo
          (slstats-format-grid-size-total "PG.........." :pg grid-size)
          (slstats-format-grid-size-total "Linden Homes" :linden_homes grid-size))))))
 
+(defun slstats-insert-map (uuid)
+  (let ((map (make-temp-file "slstats-map-" nil ".jpg")))
+    (unwind-protect
+        (progn
+          (url-copy-file (slstats-texture-url uuid) map t)
+          (insert-image-file map))
+      (delete-file map))))
+
 ;;;###autoload
 (defun slstats-region-info (region)
   (interactive "sRegion: ")
@@ -211,22 +219,34 @@ This includes information available about the state of the grid and the SL econo
            (slstats-caption "Last seen on grid.")
            (slstats-get :lastseen region-info)
            " (as seen by GridSurvey.com)\n"
-           (slstats-caption "Object map........"))
+           (slstats-caption "Object map UUID..."))
           (help-insert-xref-button
-           (slstats-texture-url (slstats-get :objects_uuid region-info))
+           (slstats-get :objects_uuid region-info)
            'help-url
            (slstats-texture-url (slstats-get :objects_uuid region-info)))
           (insert
            "\n"
-           (slstats-caption "Terrain map......."))
+           (slstats-caption "Terrain map UUID.."))
           (help-insert-xref-button
-           (slstats-texture-url (slstats-get :terrain_uuid region-info))
+           (slstats-get :terrain_uuid region-info)
            'help-url
            (slstats-texture-url (slstats-get :terrain_uuid region-info)))
           (insert
            "\n"
            (slstats-caption "Region UUID.......")
-           (slstats-get :region_uuid region-info)))))))
+           (slstats-get :region_uuid region-info))
+          (when window-system
+            (insert
+             "\n\n"
+             (slstats-caption "Object map")
+             "\n")
+            (slstats-insert-map (slstats-get :objects_uuid region-info))
+            (setf (point) (point-max))
+            (insert
+             "\n\n"
+             (slstats-caption "Terrain map")
+             "\n")
+            (slstats-insert-map (slstats-get :terrain_uuid region-info))))))))
 
 (provide 'slstats)
 
