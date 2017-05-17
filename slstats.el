@@ -43,7 +43,7 @@
 (defface slstats-caption
   '((t :inherit (bold font-lock-function-name-face)))
   "Face used on captions in the slstats output windows."
-  :group 'games)
+  :group 'slstats)
 
 (defconst slstats-lab-url "http://secondlife.com/httprequest/homepage.php"
   "The URL that contains the SL statistics.")
