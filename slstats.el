@@ -192,25 +192,41 @@ This includes information available about the state of the grid and the SL econo
       (with-help-window "*Second Life Region Information*"
         (with-current-buffer standard-output
           (insert
-           (format "Information for %s\n\n" region)
-           (format "Grid position: %s, %s\n" (slstats-get :x region-info) (slstats-get :y region-info))
-           (format "Status: %s\n" (slstats-get :status region-info))
-           (format "Maturity level: %s\n" (slstats-get :access region-info))
-           (format "Estate type: %s\n" (slstats-get :estate region-info))
-           (format "First seen on grid: %s\n" (slstats-get :firstseen region-info))
-           (format "Last seen on grid: %s (as seen by GridSurvey.com)\n" (slstats-get :lastseen region-info)))
-          (insert "Object map: ")
+           (slstats-caption (concat "Information for " region))
+           "\n\n"
+           (slstats-caption "Grid position.....") (format "%s, %s"
+                                                     (slstats-get :x region-info)
+                                                     (slstats-get :y region-info))
+           "\n"
+           (slstats-caption "Status............") (slstats-get :status region-info)
+           "\n"
+           (slstats-caption "Maturity level....") (slstats-get :access region-info)
+           "\n"
+           (slstats-caption "Estate type.......")
+           (slstats-get :estate region-info)
+           "\n"
+           (slstats-caption "First seen on grid")
+           (slstats-get :firstseen region-info)
+           "\n"
+           (slstats-caption "Last seen on grid.")
+           (slstats-get :lastseen region-info)
+           " (as seen by GridSurvey.com)\n"
+           (slstats-caption "Object map........"))
           (help-insert-xref-button
            (slstats-texture-url (slstats-get :objects_uuid region-info))
            'help-url
            (slstats-texture-url (slstats-get :objects_uuid region-info)))
-          (insert "\nTerrain map: ")
+          (insert
+           "\n"
+           (slstats-caption "Terrain map......."))
           (help-insert-xref-button
            (slstats-texture-url (slstats-get :terrain_uuid region-info))
            'help-url
            (slstats-texture-url (slstats-get :terrain_uuid region-info)))
           (insert
-           (format "\nRegion UUID: %s\n" (slstats-get :region_uuid region-info))))))))
+           "\n"
+           (slstats-caption "Region UUID.......")
+           (slstats-get :region_uuid region-info)))))))
 
 (provide 'slstats)
 
