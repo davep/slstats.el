@@ -91,7 +91,9 @@ SEP is an optional separator that is passed to `split-string'."
 
 (defun slstats-load-region-data (region)
   "Load data about REGION."
-  (slstats-load-data (format slstats-region-info-url (url-hexify-string region))))
+  (let ((data (slstats-load-data (format slstats-region-info-url (url-hexify-string region)))))
+    (unless (slstats-get :Error data)
+      data)))
 
 (defun slstats-format-time (time stats)
   "Format TIME from STATS as a string."
@@ -212,57 +214,59 @@ This includes information available about the state of the grid and the SL econo
   (if (zerop (length region))
       (message "Please provide a region name")
     (let ((region-info (slstats-load-region-data region)))
-      (with-help-window "*Second Life Region Information*"
-        (with-current-buffer standard-output
-          (insert
-           (slstats-caption (concat "Information for " region))
-           "\n\n"
-           (slstats-caption "Grid position.....") (format "%s, %s"
-                                                     (slstats-get :x region-info)
-                                                     (slstats-get :y region-info))
-           "\n"
-           (slstats-caption "Status............") (slstats-get :status region-info)
-           "\n"
-           (slstats-caption "Maturity level....") (slstats-get :access region-info)
-           "\n"
-           (slstats-caption "Estate type.......")
-           (slstats-get :estate region-info)
-           "\n"
-           (slstats-caption "First seen on grid")
-           (slstats-get :firstseen region-info)
-           "\n"
-           (slstats-caption "Last seen on grid.")
-           (slstats-get :lastseen region-info)
-           " (as seen by GridSurvey.com)\n"
-           (slstats-caption "Object map UUID..."))
-          (help-insert-xref-button
-           (slstats-get :objects_uuid region-info)
-           'help-url
-           (slstats-texture-url (slstats-get :objects_uuid region-info)))
-          (insert
-           "\n"
-           (slstats-caption "Terrain map UUID.."))
-          (help-insert-xref-button
-           (slstats-get :terrain_uuid region-info)
-           'help-url
-           (slstats-texture-url (slstats-get :terrain_uuid region-info)))
-          (insert
-           "\n"
-           (slstats-caption "Region UUID.......")
-           (slstats-get :region_uuid region-info))
-          (when window-system
-            (insert
-             "\n\n"
-             (slstats-caption "Object map")
-             "\n")
-            (slstats-insert-map (slstats-get :objects_uuid region-info))
-            (setf (point) (point-max))
-            (insert
-             "\n\n"
-             (slstats-caption "Terrain map")
-             "\n")
-            (slstats-insert-map (slstats-get :terrain_uuid region-info))))))))
+      (if region-info
+          (with-help-window "*Second Life Region Information*"
+            (with-current-buffer standard-output
+              (insert
+               (slstats-caption (concat "Information for " region))
+               "\n\n"
+               (slstats-caption "Grid position.....") (format "%s, %s"
+                                                              (slstats-get :x region-info)
+                                                              (slstats-get :y region-info))
+               "\n"
+               (slstats-caption "Status............") (slstats-get :status region-info)
+               "\n"
+               (slstats-caption "Maturity level....") (slstats-get :access region-info)
+               "\n"
+               (slstats-caption "Estate type.......")
+               (slstats-get :estate region-info)
+               "\n"
+               (slstats-caption "First seen on grid")
+               (slstats-get :firstseen region-info)
+               "\n"
+               (slstats-caption "Last seen on grid.")
+               (slstats-get :lastseen region-info)
+               " (as seen by GridSurvey.com)\n"
+               (slstats-caption "Object map UUID..."))
+              (help-insert-xref-button
+               (slstats-get :objects_uuid region-info)
+               'help-url
+               (slstats-texture-url (slstats-get :objects_uuid region-info)))
+              (insert
+               "\n"
+               (slstats-caption "Terrain map UUID.."))
+              (help-insert-xref-button
+               (slstats-get :terrain_uuid region-info)
+               'help-url
+               (slstats-texture-url (slstats-get :terrain_uuid region-info)))
+              (insert
+               "\n"
+               (slstats-caption "Region UUID.......")
+               (slstats-get :region_uuid region-info))
+              (when window-system
+                (insert
+                 "\n\n"
+                 (slstats-caption "Object map")
+                 "\n")
+                (slstats-insert-map (slstats-get :objects_uuid region-info))
+                (setf (point) (point-max))
+                (insert
+                 "\n\n"
+                 (slstats-caption "Terrain map")
+                 "\n")
+                (slstats-insert-map (slstats-get :terrain_uuid region-info)))))
+        (error "%s is not a known region on the Second Life grid" region)))))
 
-(provide 'slstats)
+  (provide 'slstats)
 
 ;;; slstats.el ends here
