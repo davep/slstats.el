@@ -140,32 +140,34 @@ This includes information available about the state of the grid and the SL econo
   (let ((lab-stats (slstats-load-lab-data))
         (grid-size (slstats-load-grid-size-data)))
     (with-help-window "*Second Life Stats*"
-      (princ "Total sign-ups..: ")
-      (princ (slstats-get :signups lab-stats))
-      (princ "\n")
-      (princ "Last updated....: ")
-      (princ (slstats-format-time :signups_updated_unix lab-stats))
-      (princ "\n\n")
-      (princ "Exchange rate...: ")
-      (princ (slstats-get :exchange_rate lab-stats))
-      (princ "\n")
-      (princ "Last updated....: ")
-      (princ (slstats-format-time :exchange_rate_updated_unix lab-stats))
-      (princ "\n\n")
-      (princ "Avatars in-world: ")
-      (princ (slstats-get :inworld lab-stats))
-      (princ "\n")
-      (princ "Last updated....: ")
-      (princ (slstats-format-time :inworld_updated_unix lab-stats))
-      (princ "\n\n")
-      (princ "Grid size:\n")
-      (princ (slstats-format-grid-size-total "Total......." :total grid-size))
-      (princ (slstats-format-grid-size-total "Private....." :private grid-size))
-      (princ (slstats-format-grid-size-total "Linden......" :linden grid-size))
-      (princ (slstats-format-grid-size-total "Adult......." :adult grid-size))
-      (princ (slstats-format-grid-size-total "Mature......" :mature grid-size))
-      (princ (slstats-format-grid-size-total "PG.........." :pg grid-size))
-      (princ (slstats-format-grid-size-total "Linden Homes" :linden_homes grid-size)))))
+      (with-current-buffer standard-output
+        (insert
+         "Total sign-ups..: "
+         (slstats-get :signups lab-stats)
+         "\n"
+         "Last updated....: "
+         (slstats-format-time :signups_updated_unix lab-stats)
+         "\n\n"
+         "Exchange rate...: "
+         (slstats-get :exchange_rate lab-stats)
+         "\n"
+         "Last updated....: "
+         (slstats-format-time :exchange_rate_updated_unix lab-stats)
+         "\n\n"
+         "Avatars in-world: "
+         (slstats-get :inworld lab-stats)
+         "\n"
+         "Last updated....: "
+         (slstats-format-time :inworld_updated_unix lab-stats)
+         "\n\n"
+         "Grid size:\n"
+         (slstats-format-grid-size-total "Total......." :total grid-size)
+         (slstats-format-grid-size-total "Private....." :private grid-size)
+         (slstats-format-grid-size-total "Linden......" :linden grid-size)
+         (slstats-format-grid-size-total "Adult......." :adult grid-size)
+         (slstats-format-grid-size-total "Mature......" :mature grid-size)
+         (slstats-format-grid-size-total "PG.........." :pg grid-size)
+         (slstats-format-grid-size-total "Linden Homes" :linden_homes grid-size))))))
 
 ;;;###autoload
 (defun slstats-region-info (region)
