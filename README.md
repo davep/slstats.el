@@ -14,6 +14,8 @@ and [its economy](http://gridsurvey.com/economy.php). Included commands are:
 
 `slstats-inworld` - Displays how many avatars are in-world.
 
+`slstats-concurrency` - Displays concurrency data.
+
 `slstats-grid-size` - Displays stats about the size of the Second Life grid.
 
 `slstats` - Opens a window and displays all the above. The result looks
