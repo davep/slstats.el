@@ -197,6 +197,7 @@ This includes information available about the state of the grid and the SL econo
          (slstats-format-grid-size-total "Linden Homes" :linden_homes grid-size))))))
 
 (defun slstats-insert-map (uuid)
+  "Given a UUID, insert a map texture into the current buffer."
   (let ((map (make-temp-file "slstats-map-" nil ".jpg")))
     (unwind-protect
         (progn
@@ -206,6 +207,7 @@ This includes information available about the state of the grid and the SL econo
 
 ;;;###autoload
 (defun slstats-region-info (region)
+  "Display information for REGION."
   (interactive "sRegion: ")
   (if (zerop (length region))
       (message "Please provide a region name")
