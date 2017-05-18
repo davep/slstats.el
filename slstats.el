@@ -234,12 +234,14 @@ This includes information available about the state of the grid and the SL econo
 
 (defun slstats-insert-map (uuid)
   "Given a UUID, insert a map texture into the current buffer."
-  (let ((map (make-temp-file "slstats-map-" nil ".jpg")))
-    (unwind-protect
-        (progn
-          (url-copy-file (slstats-texture-url uuid) map t)
-          (insert-image-file map))
-      (delete-file map))))
+  (if (image-type-available-p 'jpeg)
+      (let ((map (make-temp-file "slstats-map-" nil ".jpg")))
+        (unwind-protect
+            (progn
+              (url-copy-file (slstats-texture-url uuid) map t)
+              (insert-image-file map))
+          (delete-file map)))
+    (insert "Sorry, your build of Emacs can't display jpeg files.")))
 
 ;;;###autoload
 (defun slstats-region-info (region)
