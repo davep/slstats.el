@@ -147,10 +147,10 @@ last-update time for the statistic."
   "Display the latest-known concurrency stats for Second Life."
   (interactive)
   (let ((stats (slstats-load-concurrency-data)))
-    (message "As of %s: Max: %s, Min: %s, Mean: %s, Median: %s"
+    (message "As of %s: Min: %s, Max: %s, Mean: %s, Median: %s"
              (slstats-get :date stats)
-             (slstats-get :max_online stats)
              (slstats-get :min_online stats)
+             (slstats-get :max_online stats)
              (slstats-get :mean_online stats)
              (slstats-get :median_online stats))))
 
