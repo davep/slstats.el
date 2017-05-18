@@ -246,7 +246,7 @@ This includes information available about the state of the grid and the SL econo
   "Display information for REGION."
   (interactive "sRegion: ")
   (if (zerop (length region))
-      (message "Please provide a region name")
+      (error "Please provide a region name")
     (let ((region-info (slstats-load-region-data region)))
       (if region-info
           (with-help-window "*Second Life Region Information*"
