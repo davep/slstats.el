@@ -45,6 +45,11 @@
   "Face used on captions in the slstats output windows."
   :group 'slstats)
 
+(defcustom slstats-cache-timeout (* 60 5)
+  "Seconds to wait before deciding data in the cache is \"stale\"."
+  :type 'integer
+  :group 'slstats)
+
 (defconst slstats-lab-url "http://secondlife.com/httprequest/homepage.php"
   "The URL that contains the SL statistics.")
 
@@ -85,9 +90,6 @@ SEP is an optional separator that is passed to `split-string'."
         (split-string
          (buffer-substring-no-properties (point) (point-max))
          sep))))))
-
-(defconst slstats-cache-timeout (* 60 5)
-  "Length of time to hold on to cached data.")
 
 (defvar slstats-cache (make-hash-table :size 5)
   "Data cache.")
