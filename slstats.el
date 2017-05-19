@@ -325,6 +325,6 @@ This includes information available about the state of the grid and the SL econo
                 (slstats-insert-map (slstats-get :terrain_uuid region-info)))))
         (error "%s is not a known region on the Second Life grid" region)))))
 
-  (provide 'slstats)
+(provide 'slstats)
 
 ;;; slstats.el ends here
