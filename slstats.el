@@ -86,9 +86,25 @@ SEP is an optional separator that is passed to `split-string'."
          (buffer-substring-no-properties (point) (point-max))
          sep))))))
 
+(defconst slstats-lab-data-cache-timeout (* 60 5)
+  "Length of time to hold on to cached data from Linden Lab's server.
+
+See also `slstats-lab-data-cache'.")
+
+(defvar slstats-lab-data-cache nil
+  "Cache of the data grabbed from Linden Lab's server.")
+
 (defun slstats-load-lab-data ()
   "Load the raw statistics about Second Life from Linden Lab."
-  (slstats-load-data slstats-lab-url "\n"))
+  (cl-flet ((populate-cache
+             (lambda ()
+               (setq slstats-lab-data-cache (cons (time-to-seconds) (slstats-load-data slstats-lab-url "\n"))))))
+    (if slstats-lab-data-cache
+        (let ((when-cached (car slstats-lab-data-cache)))
+          (if (> (- (time-to-seconds) when-cached) slstats-lab-data-cache-timeout)
+              (populate-cache)
+            slstats-lab-data-cache))
+      (populate-cache))))
 
 (defun slstats-load-concurrency-data ()
   "Load the concurrency data."
