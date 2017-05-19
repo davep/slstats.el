@@ -86,33 +86,39 @@ SEP is an optional separator that is passed to `split-string'."
          (buffer-substring-no-properties (point) (point-max))
          sep))))))
 
-(defconst slstats-lab-data-cache-timeout (* 60 5)
-  "Length of time to hold on to cached data from Linden Lab's server.
+(defconst slstats-cache-timeout (* 60 5)
+  "Length of time to hold on to cached data.")
 
-See also `slstats-lab-data-cache'.")
+(defvar slstats-cache (make-hash-table :size 5)
+  "Data cache.")
 
-(defvar slstats-lab-data-cache nil
-  "Cache of the data grabbed from Linden Lab's server.")
+(defun slstats-from-cache (id)
+  "Get stats with ID from the cache."
+  (let ((cached (gethash id slstats-cache)))
+    (when cached
+      (let ((when-cached (car cached)))
+        (when (< (- (time-to-seconds) when-cached) slstats-cache-timeout)
+          (cdr cached))))))
+
+(defun slstats-cache (id value)
+  "Cache stats with ID and VALUE."
+  (cdr (puthash id (cons (time-to-seconds) value) slstats-cache)))
+
+(defun slstats-cached (id getter)
+  "Get stats with ID from the cache, or use and cache result of GETTER."
+  (or (slstats-from-cache id) (slstats-cache id (funcall getter))))
 
 (defun slstats-load-lab-data ()
   "Load the raw statistics about Second Life from Linden Lab."
-  (cl-flet ((populate-cache
-             (lambda ()
-               (setq slstats-lab-data-cache (cons (time-to-seconds) (slstats-load-data slstats-lab-url "\n"))))))
-    (if slstats-lab-data-cache
-        (let ((when-cached (car slstats-lab-data-cache)))
-          (if (> (- (time-to-seconds) when-cached) slstats-lab-data-cache-timeout)
-              (populate-cache)
-            slstats-lab-data-cache))
-      (populate-cache))))
+  (slstats-cached :lab-data (lambda () (slstats-load-data slstats-lab-url "\n"))))
 
 (defun slstats-load-concurrency-data ()
   "Load the concurrency data."
-  (slstats-load-data slstats-concurrency-url))
+  (slstats-cached :concurrency-data (lambda () (slstats-load-data slstats-concurrency-url))))
 
 (defun slstats-load-grid-size-data ()
   "Load the grid size data."
-  (slstats-load-data slstats-grid-size-url))
+  (slstats-cached :grid-size-data (lambda () (slstats-load-data slstats-grid-size-url))))
 
 (defun slstats-load-region-data (region)
   "Load data about REGION."
