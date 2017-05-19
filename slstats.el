@@ -241,7 +241,7 @@ This includes information available about the state of the grid and the SL econo
               (url-copy-file (slstats-texture-url uuid) map t)
               (insert-image-file map))
           (delete-file map)))
-    (insert "Sorry, your build of Emacs can't display jpeg files.")))
+    (insert "This build of Emacs can't display jpeg files.")))
 
 ;;;###autoload
 (defun slstats-region-info (region)
