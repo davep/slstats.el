@@ -1,5 +1,8 @@
 # slstats.el
 
+[![MELPA Stable](https://stable.melpa.org/packages/slstats-badge.svg)](https://stable.melpa.org/#/slstats)
+[![MELPA](https://melpa.org/packages/slstats-badge.svg)](https://melpa.org/#/slstats)
+
 Acquire and display stats about Second Life
 
 ## Commentary:
