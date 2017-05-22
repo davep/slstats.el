@@ -178,9 +178,9 @@ last-update time for the statistic."
   (let ((stats (slstats-load-concurrency-data)))
     (message "As of %s: Min: %s, Max: %s, Mean: %s, Median: %s"
              (slstats-get :date stats)
-             (slstats-format-number :min_online stats)
-             (slstats-format-number :max_online stats)
-             (slstats-format-number :mean_online stats)
+             (slstats-format-number :min_online    stats)
+             (slstats-format-number :max_online    stats)
+             (slstats-format-number :mean_online   stats)
              (slstats-format-number :median_online stats))))
 
 ;;;###autoload
@@ -189,12 +189,12 @@ last-update time for the statistic."
   (interactive)
   (let ((stats (slstats-load-grid-size-data)))
     (message "Regions: Total: %s, Private: %s, Linden: %s, Adult: %s, Mature: %s, PG: %s, Linden Homes: %s"
-             (slstats-format-number :total stats)
-             (slstats-format-number :private stats)
-             (slstats-format-number :linden stats)
-             (slstats-format-number :adult stats)
-             (slstats-format-number :mature stats)
-             (slstats-format-number :pg stats)
+             (slstats-format-number :total        stats)
+             (slstats-format-number :private      stats)
+             (slstats-format-number :linden       stats)
+             (slstats-format-number :adult        stats)
+             (slstats-format-number :mature       stats)
+             (slstats-format-number :pg           stats)
              (slstats-format-number :linden_homes stats))))
 
 (defun slstats-caption (s)
@@ -241,25 +241,21 @@ This includes information available about the state of the grid and the SL econo
          "\n\n"
          (slstats-caption "Grid size")
          "\n"
-         (slstats-format-grid-size-total "Total......." :total grid-size)
-         (slstats-format-grid-size-total "Private....." :private grid-size)
-         (slstats-format-grid-size-total "Linden......" :linden grid-size)
-         (slstats-format-grid-size-total "Adult......." :adult grid-size)
-         (slstats-format-grid-size-total "Mature......" :mature grid-size)
-         (slstats-format-grid-size-total "PG.........." :pg grid-size)
+         (slstats-format-grid-size-total "Total......." :total        grid-size)
+         (slstats-format-grid-size-total "Private....." :private      grid-size)
+         (slstats-format-grid-size-total "Linden......" :linden       grid-size)
+         (slstats-format-grid-size-total "Adult......." :adult        grid-size)
+         (slstats-format-grid-size-total "Mature......" :mature       grid-size)
+         (slstats-format-grid-size-total "PG.........." :pg           grid-size)
          (slstats-format-grid-size-total "Linden Homes" :linden_homes grid-size)
          "\n"
          (slstats-caption "Grid concurrency")
          "\n"
-         (slstats-caption "As of..") (slstats-get :date grid-conc)
-         "\n"
-         (slstats-caption "Minimum") (slstats-format-number :min_online grid-conc)
-         "\n"
-         (slstats-caption "Maximum") (slstats-format-number :max_online grid-conc)
-         "\n"
-         (slstats-caption "Median.") (slstats-format-number :median_online grid-conc)
-         "\n"
-         (slstats-caption "Mean...") (slstats-format-number :mean_online grid-conc))))))
+         (slstats-caption "As of..") (slstats-get :date grid-conc) "\n"
+         (slstats-caption "Minimum") (slstats-format-number :min_online    grid-conc) "\n"
+         (slstats-caption "Maximum") (slstats-format-number :max_online    grid-conc) "\n"
+         (slstats-caption "Median.") (slstats-format-number :median_online grid-conc) "\n"
+         (slstats-caption "Mean...") (slstats-format-number :mean_online   grid-conc))))))
 
 (defun slstats-insert-map (uuid)
   "Given a UUID, insert a map texture into the current buffer."
