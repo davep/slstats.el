@@ -207,7 +207,7 @@ last-update time for the statistic."
 TITLE is the title to give the size. SIZE is the keyword of the
 size we're going to format, and STATS is the stats list we'll
 pull it from."
-  (format "%s%s\n" (slstats-caption title) (slstats-format-number size stats)))
+  (format "%s%6s\n" (slstats-caption title) (slstats-format-number size stats)))
 
 ;;;###autoload
 (defun slstats ()
