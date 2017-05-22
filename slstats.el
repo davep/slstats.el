@@ -222,7 +222,7 @@ This includes information available about the state of the grid and the SL econo
       (with-current-buffer standard-output
         (insert
          (slstats-caption "Total sign-ups..")
-         (slstats-get :signups lab-stats)
+         (slstats-format-number :signups lab-stats)
          "\n"
          (slstats-caption "Last updated....")
          (slstats-format-time :signups_updated_unix lab-stats)
