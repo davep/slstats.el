@@ -227,17 +227,17 @@ This includes information available about the state of the grid and the SL econo
          (slstats-caption "Last updated....")
          (slstats-format-time :signups_updated_unix lab-stats)
          "\n\n"
-         (slstats-caption "Exchange rate...")
-         (slstats-format-number :exchange_rate lab-stats)
-         "\n"
-         (slstats-caption "Last updated....")
-         (slstats-format-time :exchange_rate_updated_unix lab-stats)
-         "\n\n"
          (slstats-caption "Avatars in-world")
          (slstats-format-number :inworld lab-stats)
          "\n"
          (slstats-caption "Last updated....")
          (slstats-format-time :inworld_updated_unix lab-stats)
+         "\n\n"
+         (slstats-caption "Exchange rate...")
+         (slstats-format-number :exchange_rate lab-stats)
+         "\n"
+         (slstats-caption "Last updated....")
+         (slstats-format-time :exchange_rate_updated_unix lab-stats)
          "\n\n"
          (slstats-caption "Grid size")
          "\n"
