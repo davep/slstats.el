@@ -35,6 +35,7 @@
 
 (require 'url)
 (require 'cl-lib)
+(require 'calc-ext)
 
 (defgroup slstats nil
   "Show stats and information about Second Life."
@@ -128,6 +129,10 @@ SEP is an optional separator that is passed to `split-string'."
     (unless (slstats-get :Error data)
       data)))
 
+(defun slstats-format-number (number stats)
+  "Format NUMBER from STATS as a readable number."
+  (math-group-float (slstats-get number stats)))
+
 (defun slstats-format-time (time stats)
   "Format TIME from STATS as a string."
   (format-time-string "%F %T%z" (string-to-number (slstats-get time stats))))
@@ -145,7 +150,7 @@ last-update time for the statistic."
   (let ((stats (slstats-load-lab-data)))
     (message "%s: %s (as of %s)"
              name
-             (slstats-get data stats)
+             (slstats-format-number data stats)
              (slstats-format-time time stats))))
 
 ;;;###autoload
@@ -173,10 +178,10 @@ last-update time for the statistic."
   (let ((stats (slstats-load-concurrency-data)))
     (message "As of %s: Min: %s, Max: %s, Mean: %s, Median: %s"
              (slstats-get :date stats)
-             (slstats-get :min_online stats)
-             (slstats-get :max_online stats)
-             (slstats-get :mean_online stats)
-             (slstats-get :median_online stats))))
+             (slstats-format-number :min_online stats)
+             (slstats-format-number :max_online stats)
+             (slstats-format-number :mean_online stats)
+             (slstats-format-number :median_online stats))))
 
 ;;;###autoload
 (defun slstats-grid-size ()
@@ -184,13 +189,13 @@ last-update time for the statistic."
   (interactive)
   (let ((stats (slstats-load-grid-size-data)))
     (message "Regions: Total: %s, Private: %s, Linden: %s, Adult: %s, Mature: %s, PG: %s, Linden Homes: %s"
-             (slstats-get :total stats)
-             (slstats-get :private stats)
-             (slstats-get :linden stats)
-             (slstats-get :adult stats)
-             (slstats-get :mature stats)
-             (slstats-get :pg stats)
-             (slstats-get :linden_homes stats))))
+             (slstats-format-number :total stats)
+             (slstats-format-number :private stats)
+             (slstats-format-number :linden stats)
+             (slstats-format-number :adult stats)
+             (slstats-format-number :mature stats)
+             (slstats-format-number :pg stats)
+             (slstats-format-number :linden_homes stats))))
 
 (defun slstats-caption (s)
   "Add properties to S to make it a caption for the slstats outout."
@@ -202,7 +207,7 @@ last-update time for the statistic."
 TITLE is the title to give the size. SIZE is the keyword of the
 size we're going to format, and STATS is the stats list we'll
 pull it from."
-  (format "%s%s\n" (slstats-caption title) (slstats-get size stats)))
+  (format "%s%s\n" (slstats-caption title) (slstats-format-number size stats)))
 
 ;;;###autoload
 (defun slstats ()
@@ -223,13 +228,13 @@ This includes information available about the state of the grid and the SL econo
          (slstats-format-time :signups_updated_unix lab-stats)
          "\n\n"
          (slstats-caption "Exchange rate...")
-         (slstats-get :exchange_rate lab-stats)
+         (slstats-format-number :exchange_rate lab-stats)
          "\n"
          (slstats-caption "Last updated....")
          (slstats-format-time :exchange_rate_updated_unix lab-stats)
          "\n\n"
          (slstats-caption "Avatars in-world")
-         (slstats-get :inworld lab-stats)
+         (slstats-format-number :inworld lab-stats)
          "\n"
          (slstats-caption "Last updated....")
          (slstats-format-time :inworld_updated_unix lab-stats)
@@ -248,13 +253,13 @@ This includes information available about the state of the grid and the SL econo
          "\n"
          (slstats-caption "As of..") (slstats-get :date grid-conc)
          "\n"
-         (slstats-caption "Minimum") (slstats-get :min_online grid-conc)
+         (slstats-caption "Minimum") (slstats-format-number :min_online grid-conc)
          "\n"
-         (slstats-caption "Maximum") (slstats-get :max_online grid-conc)
+         (slstats-caption "Maximum") (slstats-format-number :max_online grid-conc)
          "\n"
-         (slstats-caption "Median.") (slstats-get :median_online grid-conc)
+         (slstats-caption "Median.") (slstats-format-number :median_online grid-conc)
          "\n"
-         (slstats-caption "Mean...") (slstats-get :mean_online grid-conc))))))
+         (slstats-caption "Mean...") (slstats-format-number :mean_online grid-conc))))))
 
 (defun slstats-insert-map (uuid)
   "Given a UUID, insert a map texture into the current buffer."
