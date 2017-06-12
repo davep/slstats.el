@@ -199,7 +199,7 @@ last-update time for the statistic."
 
 (defun slstats-caption (s)
   "Add properties to S to make it a caption for the slstats outout."
-  (propertize (concat s ": ") 'font-lock-face 'package-help-section-name))
+  (propertize (concat s ": ") 'font-lock-face 'slstats-caption))
 
 (defun slstats-format-grid-size-total (title size stats)
   "Format a grid size total.
