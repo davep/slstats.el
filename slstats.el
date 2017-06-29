@@ -156,8 +156,8 @@ last-update time for the statistic."
         (message "%s: %s (as of %s)"
                  name
                  (slstats-format-number data stats)
-                 (slstats-format-time time stats)))
-    (error "Unable to load Second Life stats")))
+                 (slstats-format-time time stats))
+      (error "Unable to load Second Life stats"))))
 
 ;;;###autoload
 (defun slstats-signups ()
