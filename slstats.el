@@ -34,6 +34,7 @@
 ;;; Code:
 
 (require 'url)
+(require 'url-vars)
 (require 'cl-lib)
 (require 'calc-ext)
 
