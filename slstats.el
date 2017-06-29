@@ -145,19 +145,27 @@ SEP is an optional separator that is passed to `split-string'."
   "Return a Second Life texture URL for UUID."
   (format slstats-texture-url uuid))
 
+(defmacro slstats-with-stats (name data &rest body)
+  "Check that DATA is good, execute BODY if it is.
+
+Throws an error if the data doesn't look good."
+  (declare (indent 2))
+  `(let ((,name ,data))
+     (if ,name
+         ,@body
+       (error "Unable to load second life stats"))))
+
 (defun slstats-message (name data time)
   "Show a Second Life statistic as a message.
 
 NAME is the title to give the statistic. DATA is the keyword for
 finding the statistic. TIME is the keyword for finding the
 last-update time for the statistic."
-  (let ((stats (slstats-load-lab-data)))
-    (if stats
-        (message "%s: %s (as of %s)"
-                 name
-                 (slstats-format-number data stats)
-                 (slstats-format-time time stats))
-      (error "Unable to load Second Life stats"))))
+  (slstats-with-stats stats (slstats-load-lab-data)
+    (message "%s: %s (as of %s)"
+             name
+             (slstats-format-number data stats)
+             (slstats-format-time time stats))))
 
 ;;;###autoload
 (defun slstats-signups ()
@@ -181,31 +189,27 @@ last-update time for the statistic."
 (defun slstats-concurrency ()
   "Display the latest-known concurrency stats for Second Life."
   (interactive)
-  (let ((stats (slstats-load-concurrency-data)))
-    (if stats
-        (message "As of %s: Min: %s, Max: %s, Mean: %s, Median: %s"
-                 (slstats-get :date stats)
-                 (slstats-format-number :min_online    stats)
-                 (slstats-format-number :max_online    stats)
-                 (slstats-format-number :mean_online   stats)
-                 (slstats-format-number :median_online stats))
-      (error "Unable to load Second Life stats"))))
+  (slstats-with-stats stats (slstats-load-concurrency-data)
+    (message "As of %s: Min: %s, Max: %s, Mean: %s, Median: %s"
+             (slstats-get :date stats)
+             (slstats-format-number :min_online    stats)
+             (slstats-format-number :max_online    stats)
+             (slstats-format-number :mean_online   stats)
+             (slstats-format-number :median_online stats))))
 
 ;;;###autoload
 (defun slstats-grid-size ()
   "Display the grid size data for Second Life."
   (interactive)
-  (let ((stats (slstats-load-grid-size-data)))
-    (if stats
-        (message "Regions: Total: %s, Private: %s, Linden: %s, Adult: %s, Mature: %s, PG: %s, Linden Homes: %s"
-                 (slstats-format-number :total        stats)
-                 (slstats-format-number :private      stats)
-                 (slstats-format-number :linden       stats)
-                 (slstats-format-number :adult        stats)
-                 (slstats-format-number :mature       stats)
-                 (slstats-format-number :pg           stats)
-                 (slstats-format-number :linden_homes stats))
-      (error "Unable to load Second Life stats"))))
+  (slstats-with-stats stats (slstats-load-grid-size-data)
+    (message "Regions: Total: %s, Private: %s, Linden: %s, Adult: %s, Mature: %s, PG: %s, Linden Homes: %s"
+             (slstats-format-number :total        stats)
+             (slstats-format-number :private      stats)
+             (slstats-format-number :linden       stats)
+             (slstats-format-number :adult        stats)
+             (slstats-format-number :mature       stats)
+             (slstats-format-number :pg           stats)
+             (slstats-format-number :linden_homes stats))))
 
 (defun slstats-caption (s)
   "Add properties to S to make it a caption for the slstats outout."
