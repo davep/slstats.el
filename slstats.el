@@ -241,7 +241,6 @@ This includes information available about the state of the grid and the SL econo
   (let ((lab-stats (slstats-load-lab-data))
         (grid-size (slstats-load-grid-size-data))
         (grid-conc (slstats-load-concurrency-data)))
-    (message "%s" lab-stats)
     (if (and lab-stats grid-size grid-conc)
         (with-help-window "*Second Life Stats*"
           (with-current-buffer standard-output
