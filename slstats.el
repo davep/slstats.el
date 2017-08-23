@@ -155,9 +155,15 @@ SEP is an optional separator that is passed to `split-string'."
   (format slstats-texture-url uuid))
 
 (defmacro slstats-with-stats (name data &rest body)
-  "Check that DATA is good, execute BODY if it is.
+  "Execute code, after having checked some SL stats are good.
 
-Throws an error if the data doesn't look good."
+NAME is the name of the stats being checked; this will be used
+when reporting any kind of error.
+
+DATA is the stats data being checked and used.
+
+BODY will be executed if everything is good, the final value will
+be returned as the result."
   (declare (indent 2))
   `(let ((,name ,data))
      (if ,name
