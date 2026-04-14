@@ -1,8 +1,8 @@
 ;;; slstats.el --- Acquire and display stats about Second Life -*- lexical-binding: t -*-
-;; Copyright 2017 by Dave Pearson <davep@davep.org>
+;; Copyright 2017-2026 by Dave Pearson <davep@davep.org>
 
 ;; Author: Dave Pearson <davep@davep.org>
-;; Version: 1.10
+;; Version: 1.11
 ;; Keywords: games
 ;; URL: https://github.com/davep/slstats.el
 ;; Package-Requires: ((emacs "25.1"))
