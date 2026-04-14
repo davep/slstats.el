@@ -5,7 +5,7 @@
 ;; Version: 1.10
 ;; Keywords: games
 ;; URL: https://github.com/davep/slstats.el
-;; Package-Requires: ((cl-lib "0.5") (emacs "24.1"))
+;; Package-Requires: ((emacs "25.1"))
 
 ;; This program is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by the
@@ -92,29 +92,27 @@
   "Load data about SL from URL.
 
 SEP is an optional separator that is passed to `split-string'."
-  (let ((buffer (url-retrieve-synchronously url t)))
-    (when buffer
-      (with-current-buffer buffer
-        (goto-char (point-min))
-        (when (search-forward-regexp "^$" nil t)
-          (slstats-to-alist
-           (cl-remove-if
-            (lambda (s)
-              (zerop (length s)))
-            (split-string
-             (buffer-substring-no-properties (point) (point-max))
-             sep))))))))
+  (when-let ((buffer (url-retrieve-synchronously url t)))
+    (with-current-buffer buffer
+      (goto-char (point-min))
+      (when (search-forward-regexp "^$" nil t)
+        (slstats-to-alist
+         (cl-remove-if
+          (lambda (s)
+            (zerop (length s)))
+          (split-string
+           (buffer-substring-no-properties (point) (point-max))
+           sep)))))))
 
 (defvar slstats-cache (make-hash-table :size 5)
   "Data cache.")
 
 (defun slstats-from-cache (id)
   "Get stats with ID from the cache."
-  (let ((cached (gethash id slstats-cache)))
-    (when cached
-      (let ((when-cached (car cached)))
-        (when (< (- (time-to-seconds) when-cached) slstats-cache-timeout)
-          (cdr cached))))))
+  (when-let ((cached (gethash id slstats-cache)))
+    (let ((when-cached (car cached)))
+      (when (< (- (time-to-seconds) when-cached) slstats-cache-timeout)
+        (cdr cached)))))
 
 (defun slstats-cache (id value)
   "Cache stats with ID and VALUE."
