@@ -49,7 +49,8 @@
 
 (defgroup slstats nil
   "Show stats and information about Second Life."
-  :group 'games)
+  :group 'games
+  :prefix "slstats-")
 
 (defface slstats-caption
   '((t :inherit (bold font-lock-function-name-face)))
