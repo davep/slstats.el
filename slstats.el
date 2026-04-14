@@ -94,7 +94,7 @@ SEP is an optional separator that is passed to `split-string'."
   (let ((buffer (url-retrieve-synchronously url t)))
     (when buffer
       (with-current-buffer buffer
-        (setf (point) (point-min))
+        (goto-char (point-min))
         (when (search-forward-regexp "^$" nil t)
           (slstats-to-alist
            (cl-remove-if
@@ -351,7 +351,7 @@ This includes information available about the state of the grid and the SL econo
                  (slstats-caption "Object map")
                  "\n")
                 (slstats-insert-map (slstats-get :objects_uuid region-info))
-                (setf (point) (point-max))
+                (goto-char (point-max))
                 (insert
                  "\n\n"
                  (slstats-caption "Terrain map")
