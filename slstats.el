@@ -5,7 +5,7 @@
 ;; Version: 1.10
 ;; Keywords: games
 ;; URL: https://github.com/davep/slstats.el
-;; Package-Requires: ((cl-lib "0.5") (emacs "24"))
+;; Package-Requires: ((cl-lib "0.5") (emacs "24.1"))
 
 ;; This program is free software: you can redistribute it and/or modify it
 ;; under the terms of the GNU General Public License as published by the
