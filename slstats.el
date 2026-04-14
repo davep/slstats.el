@@ -243,7 +243,8 @@ pull it from."
 (defun slstats ()
   "Display available statistics about Second Life.
 
-This includes information available about the state of the grid and the SL economy."
+This includes information available about the state of the grid and the
+SL economy."
   (interactive)
   (let ((lab-stats (slstats-load-lab-data))
         (grid-size (slstats-load-grid-size-data))
